@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite AI Jewelry Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">Infinite AI Jewelry Store</h1>
+                <div class="header-right">
+                    <div class="search-container">
+                        <input type="text" placeholder="Search jewelry..." class="search-input">
+                        <i data-lucide="search" class="search-icon"></i>
+                    </div>
+                    <button class="cart-button">
+                        <i data-lucide="shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+        <div id="home-content">
+            <!-- Hero Section -->
+            <div class="hero">
+                <h1>Discover Timeless Beauty</h1>
+                <p>Explore our exquisite collection of handcrafted jewelry pieces that blend traditional artistry with modern elegance.</p>
+            </div>
+
+            <!-- Categories Section -->
+            <section class="categories-section">
+                <h2>Our Collections</h2>
+                <div class="category-grid" id="category-grid"></div>
+            </section>
+
+            <!-- Featured Items -->
+            <section class="featured-section">
+                <h2>Featured Pieces</h2>
+                <div class="jewelry-grid" id="featured-items"></div>
+            </section>
+        </div>
+
+        <div id="category-content" class="hidden">
+            <button id="back-button" class="back-button">
+                <i data-lucide="arrow-left"></i> Back to Categories
+            </button>
+            <h2 id="category-title"></h2>
+            <div class="jewelry-grid" id="category-items"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>About Us</h3>
+                    <p>Infinite AI Jewelry Store brings you the finest collection of traditional and modern jewelry pieces.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Shop</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li>123 Jewelry Lane</li>
+                        <li>New York, NY 10001</li>
+                        <li>Phone: (555) 123-4567</li>
+                        <li>Email: info@infiniteaijewelry.com</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <i data-lucide="facebook"></i>
+                        <i data-lucide="instagram"></i>
+                        <i data-lucide="twitter"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Infinite AI Jewelry Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
