@@ -211,7 +211,8 @@ function closeTryOnModal() {
 renderCategories();
 renderFeaturedItems();
 
-const chatToggle = document.getElementById('chat-toggle');
+document.addEventListener('DOMContentLoaded', function() {
+    const chatToggle = document.getElementById('chat-toggle');
     const closeChat = document.getElementById('close-chat');
     const minimizeChat = document.getElementById('minimize-chat');
     const chatContainer = document.getElementById('chat-container');
@@ -221,97 +222,114 @@ const chatToggle = document.getElementById('chat-toggle');
     const typingIndicator = document.getElementById('typing-indicator');
     
     // Replace with your actual Rasa endpoint
-    const RASA_ENDPOINT = 'https://981d-13-71-3-97.ngrok-free.app'; // Still using Ngrok - remember to change for production!
+    const RASA_ENDPOINT = 'https://981d-13-71-3-97.ngrok-free.app';
     
     let sessionId = generateSessionId();
     let isMinimized = false;
     
     // Toggle chat window
-    if (chatToggle) {
-        chatToggle.addEventListener('click', () => {
-            if (chatContainer) chatContainer.classList.toggle('hidden');
-            if (chatMessages && chatMessages.children.length === 0) {
-                addBotMessage("Hey there! 👋 Welcome to Infinite AI! Type 'Hello' to start your jewelry shopping experience!");
-            }
-        });
-    }
+    chatToggle.addEventListener('click', () => {
+        chatContainer.classList.toggle('hidden');
+        if (chatMessages.children.length === 0) {
+            addBotMessage("Hey there! 👋 Welcome to Infinite AI! Type 'Hello' to start your jewelry shopping experience!");
+        }
+    });
     
-    if (closeChat) {
-        closeChat.addEventListener('click', () => {
-            if (chatContainer) chatContainer.classList.add('hidden');
-        });
-    }
+    closeChat.addEventListener('click', () => {
+        chatContainer.classList.add('hidden');
+    });
     
-    if (minimizeChat) {
-        minimizeChat.addEventListener('click', () => {
-            if (!chatContainer) return;
-            if (isMinimized) {
-                chatContainer.style.height = '600px'; // Adjusted height
-                isMinimized = false;
-            } else {
-                chatContainer.style.height = '60px'; // Adjust based on header height
-                isMinimized = true;
-            }
-        });
-    }
+    minimizeChat.addEventListener('click', () => {
+        if (isMinimized) {
+            chatContainer.style.height = '580px';
+            isMinimized = false;
+        } else {
+            chatContainer.style.height = '60px';
+            isMinimized = true;
+        }
+    });
     
-    // Send message listeners
-    if (sendButton) sendButton.addEventListener('click', sendMessage);
-    if (userInput) {
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    }
+    // Send message when button clicked
+    sendButton.addEventListener('click', sendMessage);
+    
+    // Send message when Enter key pressed
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
     
     function sendMessage() {
-        if (!userInput) return;
         const message = userInput.value.trim();
         if (!message) return;
         
+        // Add user message to chat
         addUserMessage(message);
         userInput.value = '';
+        
+        // Show typing indicator
         showTypingIndicator();
+        
+        // Send to Rasa
         sendToRasa(message);
     }
     
     function showTypingIndicator() {
-        if (typingIndicator) typingIndicator.classList.remove('hidden');
-        if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+        typingIndicator.classList.remove('hidden');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
     
     function hideTypingIndicator() {
-        if (typingIndicator) typingIndicator.classList.add('hidden');
+        typingIndicator.classList.add('hidden');
     }
     
+    // Centralized function to send messages to Rasa
     function sendToRasa(message, isPayload = false) {
-        let requestBody = {
-            sender: sessionId,
-            message: message
-        };
-        // No need to differentiate payload structure for Rasa REST channel
-
+        let requestBody;
+        if (isPayload) {
+            // For payloads from buttons
+            requestBody = {
+                sender: sessionId,
+                message: message
+            };
+        } else {
+            // For normal text messages
+            requestBody = {
+                sender: sessionId,
+                message: message
+            };
+        }
+        
         fetch(`${RASA_ENDPOINT}/webhooks/rest/webhook`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(requestBody)
         })
         .then(response => response.json())
         .then(data => {
+            // Hide typing indicator
             hideTypingIndicator();
+            
+            // Process bot responses
             if (data && data.length > 0) {
+                // Add slight delay between messages for better UX
                 let messageDelay = 0;
+                
                 data.forEach(response => {
                     setTimeout(() => {
                         if (response.text) {
                             addBotMessage(response.text);
                         }
+                        
+                        // Handle buttons if present
                         if (response.buttons && response.buttons.length > 0) {
                             addButtons(response.buttons);
                         }
                     }, messageDelay);
-                    messageDelay += 300; 
+                    
+                    messageDelay += 300; // 300ms delay between messages
                 });
             } else {
                 addBotMessage("I'm sorry, I didn't get a response. Please try again.");
@@ -325,14 +343,15 @@ const chatToggle = document.getElementById('chat-toggle');
     }
     
     function addUserMessage(text) {
-         if (!chatMessages) return;
         const messageDiv = document.createElement('div');
         messageDiv.className = 'flex justify-end mb-4';
         
+        // Create avatar
         const avatarDiv = document.createElement('div');
         avatarDiv.className = 'w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center ml-2 mt-1';
         avatarDiv.innerHTML = '<span class="text-purple-600 font-medium text-sm">You</span>';
         
+        // Create message bubble
         const bubbleDiv = document.createElement('div');
         bubbleDiv.className = 'user-bubble';
         bubbleDiv.innerText = text;
@@ -345,21 +364,25 @@ const chatToggle = document.getElementById('chat-toggle');
     }
     
     function addBotMessage(text) {
-        if (!chatMessages) return;
         const messageDiv = document.createElement('div');
         messageDiv.className = 'flex mb-4';
         
+        // Create bot avatar
         const avatarDiv = document.createElement('div');
         avatarDiv.className = 'w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center mr-2 mt-1';
         avatarDiv.innerHTML = '<i class="fas fa-gem text-white text-xs"></i>';
         
         // Check if message contains HTML for product cards
         if (text.includes('<div style=')) {
+            // Parse the message to separate text and HTML
             const textBeforeHtml = text.split('<div style=')[0].trim();
+            
+            // Create a container for the message content
             const contentContainer = document.createElement('div');
             contentContainer.className = 'bot-bubble';
-            contentContainer.style.width = '300px'; 
+            contentContainer.style.width = '300px'; // Fixed width for product cards
             
+            // Add text heading if it exists
             if (textBeforeHtml) {
                 const headingElement = document.createElement('div');
                 headingElement.className = 'mb-3 font-medium';
@@ -367,15 +390,19 @@ const chatToggle = document.getElementById('chat-toggle');
                 contentContainer.appendChild(headingElement);
             }
             
+            // Extract the HTML for products and convert to our new format
             const htmlPart = text.substring(text.indexOf('<div style='));
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = htmlPart;
             
+            // Create our new product grid
             const productGrid = document.createElement('div');
             productGrid.className = 'product-grid';
             
+            // Find all original product cards
             const originalCards = tempDiv.querySelectorAll('div[style*="border"]');
             originalCards.forEach(card => {
+                // Extract data from original card
                 const imgSrc = card.querySelector('img')?.src || "https://via.placeholder.com/150x150?text=No+Image";
                 const productName = card.querySelector('h3')?.textContent || "Product";
                 const productDesc = card.querySelector('p')?.textContent || "Description";
@@ -391,6 +418,7 @@ const chatToggle = document.getElementById('chat-toggle');
                     basePrice = priceElements[0].textContent;
                 }
                 
+                // Create new card with our enhanced styling (removed Add to Cart button)
                 const newCard = document.createElement('div');
                 newCard.className = 'product-card';
                 newCard.innerHTML = `
@@ -407,18 +435,25 @@ const chatToggle = document.getElementById('chat-toggle');
                         </div>
                     </div>
                 `;
+                
+                // No more Add to Cart button or event listener
+                
                 productGrid.appendChild(newCard);
             });
             
             contentContainer.appendChild(productGrid);
+            
             messageDiv.appendChild(avatarDiv);
             messageDiv.appendChild(contentContainer);
         } else {
             // Regular text message
             const bubbleDiv = document.createElement('div');
             bubbleDiv.className = 'bot-bubble';
+            
+            // Check for URLs and make them clickable
             const urlRegex = /(https?:\/\/[^\s]+)/g;
             const textWithLinks = text.replace(urlRegex, url => `<a href="${url}" target="_blank" class="text-purple-600 underline">${url}</a>`);
+            
             bubbleDiv.innerHTML = textWithLinks;
             
             messageDiv.appendChild(avatarDiv);
@@ -430,7 +465,6 @@ const chatToggle = document.getElementById('chat-toggle');
     }
     
     function addButtons(buttons) {
-         if (!chatMessages) return;
         const buttonsDiv = document.createElement('div');
         buttonsDiv.className = 'flex flex-wrap gap-2 mb-4 ml-10';
         
@@ -438,27 +472,49 @@ const chatToggle = document.getElementById('chat-toggle');
             const buttonEl = document.createElement('button');
             buttonEl.className = 'chat-button';
             buttonEl.textContent = button.title;
-            buttonEl.dataset.payload = button.payload; 
+            buttonEl.dataset.payload = button.payload; // Store payload as data attribute
             
             buttonEl.addEventListener('click', (event) => {
+                // Get the button's payload from the data attribute
                 const payload = event.currentTarget.dataset.payload;
+                
+                // Show user's selection
                 addUserMessage(button.title);
+                
+                // Show typing indicator
                 showTypingIndicator();
+                
+                // Send payload to Rasa
                 sendToRasa(payload, true);
             });
             
             buttonsDiv.appendChild(buttonEl);
         });
+        
         chatMessages.appendChild(buttonsDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
     
+    // Kept the addToCart function for backward compatibility but removed its usage
+    function addToCart(productIdx) {
+        // Create a payload to send to Rasa
+        const payload = `/add_to_cart{"product_idx": "${productIdx}"}`;
+        
+        // Add a user message indicating the action
+        addUserMessage(`Adding to cart`);
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Send the payload to Rasa
+        sendToRasa(payload, true);
+    }
+    
+    // Remove the document-level addToCart event listener since we don't have Add buttons anymore
+    // But keeping the function for backward compatibility in case it's used elsewhere
+    
     function generateSessionId() {
         return 'user_' + Math.random().toString(36).substring(2, 15);
     }
-
-    // Initial check if chat widget elements exist
-    if (!chatToggle || !chatContainer || !chatMessages || !userInput || !sendButton || !typingIndicator) {
-        console.warn("One or more chat widget elements were not found. Chat functionality might be limited.");
-    }
+    });
         
