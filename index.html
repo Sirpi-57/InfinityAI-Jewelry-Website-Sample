@@ -100,21 +100,21 @@
         </div>
     </footer>
 
-    <!-- Chat Widget with Explicit Styling -->
+    <!-- Chat Widget with Simplified Structure -->
     <div id="rasa-chat-widget" class="chat-widget">
-        <!-- Chat Icon Button with Pulse Effect -->
-        <button id="chat-toggle" class="chat-toggle-btn">
+        <!-- Chat Icon Button -->
+        <button id="chat-toggle" class="chat-toggle-btn" type="button">
             <span class="pulse-effect"></span>
             <i class="fas fa-comment-dots chat-icon"></i>
         </button>
     
-        <!-- Chat Container (Hidden by Default) -->
+        <!-- Chat Container -->
         <div id="chat-container" class="chat-container hidden">
-            <!-- Header with Brand -->
+            <!-- Header -->
             <div class="chat-header">
                 <div class="chat-header-brand">
                     <div class="chat-avatar">
-                        <i class="fas fa-gem chat-avatar-icon"></i>
+                        <i class="fas fa-gem"></i>
                     </div>
                     <div class="chat-title">
                         <h3 class="chat-title-text">Diya AI</h3>
@@ -122,7 +122,7 @@
                     </div>
                 </div>
                 <div class="chat-header-buttons">
-                    <button id="minimize-chat" class="chat-control-btn">
+                    <button id="minimize-chat" class="chat-control-btn" type="button">
                         <i class="fas fa-minus"></i>
                     </button>
                     <button id="close-chat" class="chat-control-btn" type="button">
@@ -131,20 +131,18 @@
                 </div>
             </div>
     
-            <!-- Chat Messages Area with Custom Scrollbar -->
-            <div id="chat-messages" class="chat-messages">
-                <!-- Messages will be added here -->
-            </div>
+            <!-- Messages Area -->
+            <div id="chat-messages" class="chat-messages"></div>
     
-            <!-- Input Area with Modern Look -->
+            <!-- Input Area -->
             <div class="chat-input-container">
                 <input id="user-message" type="text" placeholder="Type a message..." class="chat-input">
-                <button id="send-button" class="chat-send-btn">
+                <button id="send-button" class="chat-send-btn" type="button">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
     
-            <!-- Typing Indicator (initially hidden) -->
+            <!-- Typing Indicator -->
             <div id="typing-indicator" class="typing-indicator hidden">
                 <div class="typing-indicator-content">
                     <div class="typing-animation">
