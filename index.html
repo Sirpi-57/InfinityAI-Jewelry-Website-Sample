@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    </head>
+</head>
 <body>
     <header class="header">
         <div class="container">
@@ -37,13 +37,15 @@
             <section class="categories-section">
                 <h2>Our Collections</h2>
                 <div class="category-grid" id="category-grid">
-                    </div>
+                    <!-- Categories will be dynamically populated here -->
+                </div>
             </section>
 
             <section class="featured-section">
                 <h2>Featured Pieces</h2>
                 <div class="jewelry-grid" id="featured-items">
-                    </div>
+                    <!-- Featured items will be dynamically populated here -->
+                </div>
             </section>
         </div>
 
@@ -51,10 +53,10 @@
             <button id="back-button" class="back-button">
                 <i data-lucide="arrow-left"></i> Back to Categories
             </button>
-            <h2 id="category-title">
-                </h2>
+            <h2 id="category-title"></h2>
             <div class="jewelry-grid" id="category-items">
-                </div>
+                <!-- Category items will be dynamically populated here -->
+            </div>
         </div>
     </main>
 
@@ -98,60 +100,59 @@
         </div>
     </footer>
 
-    <!-- Improved Chat Widget with Modern UI -->
-    <div id="rasa-chat-widget" class="fixed bottom-0 right-0 m-6 z-50">
+    <!-- Chat Widget with Explicit Styling -->
+    <div id="rasa-chat-widget" class="chat-widget">
         <!-- Chat Icon Button with Pulse Effect -->
-        <button id="chat-toggle" class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xl flex items-center justify-center transform transition-transform hover:scale-110 relative track-click">
-            <span class="absolute animate-ping w-full h-full rounded-full bg-purple-400 opacity-50"></span>
-            <i class="fas fa-comment-dots text-2xl relative z-10"></i>
+        <button id="chat-toggle" class="chat-toggle-btn">
+            <span class="pulse-effect"></span>
+            <i class="fas fa-comment-dots chat-icon"></i>
         </button>
     
         <!-- Chat Container (Hidden by Default) -->
-        <div id="chat-container" class="hidden rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 transform" style="width: 380px; height: 600px; border: 1px solid rgba(123, 44, 191, 0.2);">
+        <div id="chat-container" class="chat-container hidden">
             <!-- Header with Brand -->
-            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4 flex justify-between items-center">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center mr-2">
-                        <i class="fas fa-gem text-purple-600 text-lg"></i>
+            <div class="chat-header">
+                <div class="chat-header-brand">
+                    <div class="chat-avatar">
+                        <i class="fas fa-gem chat-avatar-icon"></i>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-lg">Diya AI</h3>
-                        <p class="text-xs text-purple-200">Jewelry Shopping Assistant</p>
+                    <div class="chat-title">
+                        <h3 class="chat-title-text">Diya AI</h3>
+                        <p class="chat-subtitle">Jewelry Shopping Assistant</p>
                     </div>
                 </div>
-                <div class="flex space-x-2">
-                    <button id="minimize-chat" class="hover:bg-purple-500 rounded-full w-8 h-8 flex items-center justify-center">
+                <div class="chat-header-buttons">
+                    <button id="minimize-chat" class="chat-control-btn">
                         <i class="fas fa-minus"></i>
                     </button>
-                    <button id="close-chat" class="hover:bg-purple-500 rounded-full w-8 h-8 flex items-center justify-center">
+                    <button id="close-chat" class="chat-control-btn">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
             </div>
     
             <!-- Chat Messages Area with Custom Scrollbar -->
-            <div id="chat-messages" class="p-6 overflow-y-auto bg-gray-50" style="height: 440px; scrollbar-width: thin; scrollbar-color: #9d4edd #f3f4f6;">
+            <div id="chat-messages" class="chat-messages">
                 <!-- Messages will be added here -->
             </div>
     
             <!-- Input Area with Modern Look -->
-            <div class="border-t border-gray-200 p-4 flex bg-white">
-                <input id="user-message" type="text" placeholder="Type a message..." 
-                    class="flex-1 px-4 py-2 border border-gray-300 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent">
-                <button id="send-button" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-5 py-3 rounded-r-xl hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 flex items-center justify-center">
+            <div class="chat-input-container">
+                <input id="user-message" type="text" placeholder="Type a message..." class="chat-input">
+                <button id="send-button" class="chat-send-btn">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
     
             <!-- Typing Indicator (initially hidden) -->
-            <div id="typing-indicator" class="hidden px-4 py-2 bg-gray-50 border-t border-gray-200">
-                <div class="flex items-center text-sm text-gray-500">
-                    <div class="typing-animation mr-2">
+            <div id="typing-indicator" class="typing-indicator hidden">
+                <div class="typing-indicator-content">
+                    <div class="typing-animation">
                         <span></span>
                         <span></span>
                         <span></span>
                     </div>
-                    Diya is typing...
+                    <span class="typing-text">Diya is typing...</span>
                 </div>
             </div>
         </div>
@@ -159,5 +160,5 @@
 
     <script src="data.js"></script> 
     <script src="app.js"></script> 
-    </body>
+</body>
 </html>
