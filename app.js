@@ -210,3 +210,255 @@ function closeTryOnModal() {
 // Initialize the page
 renderCategories();
 renderFeaturedItems();
+
+const chatToggle = document.getElementById('chat-toggle');
+    const closeChat = document.getElementById('close-chat');
+    const minimizeChat = document.getElementById('minimize-chat');
+    const chatContainer = document.getElementById('chat-container');
+    const chatMessages = document.getElementById('chat-messages');
+    const userInput = document.getElementById('user-message');
+    const sendButton = document.getElementById('send-button');
+    const typingIndicator = document.getElementById('typing-indicator');
+    
+    // Replace with your actual Rasa endpoint
+    const RASA_ENDPOINT = 'https://981d-13-71-3-97.ngrok-free.app'; // Still using Ngrok - remember to change for production!
+    
+    let sessionId = generateSessionId();
+    let isMinimized = false;
+    
+    // Toggle chat window
+    if (chatToggle) {
+        chatToggle.addEventListener('click', () => {
+            if (chatContainer) chatContainer.classList.toggle('hidden');
+            if (chatMessages && chatMessages.children.length === 0) {
+                addBotMessage("Hey there! 👋 Welcome to Infinite AI! Type 'Hello' to start your jewelry shopping experience!");
+            }
+        });
+    }
+    
+    if (closeChat) {
+        closeChat.addEventListener('click', () => {
+            if (chatContainer) chatContainer.classList.add('hidden');
+        });
+    }
+    
+    if (minimizeChat) {
+        minimizeChat.addEventListener('click', () => {
+            if (!chatContainer) return;
+            if (isMinimized) {
+                chatContainer.style.height = '600px'; // Adjusted height
+                isMinimized = false;
+            } else {
+                chatContainer.style.height = '60px'; // Adjust based on header height
+                isMinimized = true;
+            }
+        });
+    }
+    
+    // Send message listeners
+    if (sendButton) sendButton.addEventListener('click', sendMessage);
+    if (userInput) {
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
+    
+    function sendMessage() {
+        if (!userInput) return;
+        const message = userInput.value.trim();
+        if (!message) return;
+        
+        addUserMessage(message);
+        userInput.value = '';
+        showTypingIndicator();
+        sendToRasa(message);
+    }
+    
+    function showTypingIndicator() {
+        if (typingIndicator) typingIndicator.classList.remove('hidden');
+        if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function hideTypingIndicator() {
+        if (typingIndicator) typingIndicator.classList.add('hidden');
+    }
+    
+    function sendToRasa(message, isPayload = false) {
+        let requestBody = {
+            sender: sessionId,
+            message: message
+        };
+        // No need to differentiate payload structure for Rasa REST channel
+
+        fetch(`${RASA_ENDPOINT}/webhooks/rest/webhook`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideTypingIndicator();
+            if (data && data.length > 0) {
+                let messageDelay = 0;
+                data.forEach(response => {
+                    setTimeout(() => {
+                        if (response.text) {
+                            addBotMessage(response.text);
+                        }
+                        if (response.buttons && response.buttons.length > 0) {
+                            addButtons(response.buttons);
+                        }
+                    }, messageDelay);
+                    messageDelay += 300; 
+                });
+            } else {
+                addBotMessage("I'm sorry, I didn't get a response. Please try again.");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            hideTypingIndicator();
+            addBotMessage("Sorry, I'm having trouble connecting. Please try again later.");
+        });
+    }
+    
+    function addUserMessage(text) {
+         if (!chatMessages) return;
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'flex justify-end mb-4';
+        
+        const avatarDiv = document.createElement('div');
+        avatarDiv.className = 'w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center ml-2 mt-1';
+        avatarDiv.innerHTML = '<span class="text-purple-600 font-medium text-sm">You</span>';
+        
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.className = 'user-bubble';
+        bubbleDiv.innerText = text;
+        
+        messageDiv.appendChild(bubbleDiv);
+        messageDiv.appendChild(avatarDiv);
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function addBotMessage(text) {
+        if (!chatMessages) return;
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'flex mb-4';
+        
+        const avatarDiv = document.createElement('div');
+        avatarDiv.className = 'w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center mr-2 mt-1';
+        avatarDiv.innerHTML = '<i class="fas fa-gem text-white text-xs"></i>';
+        
+        // Check if message contains HTML for product cards
+        if (text.includes('<div style=')) {
+            const textBeforeHtml = text.split('<div style=')[0].trim();
+            const contentContainer = document.createElement('div');
+            contentContainer.className = 'bot-bubble';
+            contentContainer.style.width = '300px'; 
+            
+            if (textBeforeHtml) {
+                const headingElement = document.createElement('div');
+                headingElement.className = 'mb-3 font-medium';
+                headingElement.textContent = textBeforeHtml;
+                contentContainer.appendChild(headingElement);
+            }
+            
+            const htmlPart = text.substring(text.indexOf('<div style='));
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = htmlPart;
+            
+            const productGrid = document.createElement('div');
+            productGrid.className = 'product-grid';
+            
+            const originalCards = tempDiv.querySelectorAll('div[style*="border"]');
+            originalCards.forEach(card => {
+                const imgSrc = card.querySelector('img')?.src || "https://via.placeholder.com/150x150?text=No+Image";
+                const productName = card.querySelector('h3')?.textContent || "Product";
+                const productDesc = card.querySelector('p')?.textContent || "Description";
+                const priceElements = card.querySelectorAll('span');
+                
+                let basePrice = "";
+                let discountedPrice = "";
+                
+                if (priceElements.length > 1) {
+                    basePrice = priceElements[0].textContent;
+                    discountedPrice = priceElements[1].textContent;
+                } else if (priceElements.length === 1) {
+                    basePrice = priceElements[0].textContent;
+                }
+                
+                const newCard = document.createElement('div');
+                newCard.className = 'product-card';
+                newCard.innerHTML = `
+                    <div class="product-image">
+                        <img src="${imgSrc}" alt="${productName}" onerror="this.src='https://via.placeholder.com/150x150?text=No+Image';">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${productName}</h3>
+                        <p class="product-description">${productDesc}</p>
+                        <div class="mt-3 text-center">
+                            <div class="product-price">
+                                ${discountedPrice ? `<span class="original">${basePrice}</span><span>${discountedPrice}</span>` : `<span>${basePrice}</span>`}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                productGrid.appendChild(newCard);
+            });
+            
+            contentContainer.appendChild(productGrid);
+            messageDiv.appendChild(avatarDiv);
+            messageDiv.appendChild(contentContainer);
+        } else {
+            // Regular text message
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'bot-bubble';
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const textWithLinks = text.replace(urlRegex, url => `<a href="${url}" target="_blank" class="text-purple-600 underline">${url}</a>`);
+            bubbleDiv.innerHTML = textWithLinks;
+            
+            messageDiv.appendChild(avatarDiv);
+            messageDiv.appendChild(bubbleDiv);
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function addButtons(buttons) {
+         if (!chatMessages) return;
+        const buttonsDiv = document.createElement('div');
+        buttonsDiv.className = 'flex flex-wrap gap-2 mb-4 ml-10';
+        
+        buttons.forEach(button => {
+            const buttonEl = document.createElement('button');
+            buttonEl.className = 'chat-button';
+            buttonEl.textContent = button.title;
+            buttonEl.dataset.payload = button.payload; 
+            
+            buttonEl.addEventListener('click', (event) => {
+                const payload = event.currentTarget.dataset.payload;
+                addUserMessage(button.title);
+                showTypingIndicator();
+                sendToRasa(payload, true);
+            });
+            
+            buttonsDiv.appendChild(buttonEl);
+        });
+        chatMessages.appendChild(buttonsDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function generateSessionId() {
+        return 'user_' + Math.random().toString(36).substring(2, 15);
+    }
+
+    // Initial check if chat widget elements exist
+    if (!chatToggle || !chatContainer || !chatMessages || !userInput || !sendButton || !typingIndicator) {
+        console.warn("One or more chat widget elements were not found. Chat functionality might be limited.");
+    }
+        
