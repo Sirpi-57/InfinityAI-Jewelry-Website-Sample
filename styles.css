@@ -574,10 +574,20 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: background-color 0.2s;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    position: relative;
+    z-index: 10;
 }
 
 .chat-control-btn:hover {
     background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Make sure the icon inside the button is clickable */
+.chat-control-btn i {
+    pointer-events: none;
 }
 
 /* Chat Messages */
