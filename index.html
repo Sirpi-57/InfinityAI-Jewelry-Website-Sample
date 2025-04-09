@@ -98,17 +98,21 @@
         </div>
     </footer>
 
+    <!-- Improved Chat Widget with Modern UI -->
     <div id="rasa-chat-widget" class="fixed bottom-0 right-0 m-6 z-50">
+        <!-- Chat Icon Button with Pulse Effect -->
         <button id="chat-toggle" class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xl flex items-center justify-center transform transition-transform hover:scale-110 relative track-click">
             <span class="absolute animate-ping w-full h-full rounded-full bg-purple-400 opacity-50"></span>
-            <i class="fas fa-comment-dots text-2xl relative z-10"></i> 
+            <i class="fas fa-comment-dots text-2xl relative z-10"></i>
         </button>
     
+        <!-- Chat Container (Hidden by Default) -->
         <div id="chat-container" class="hidden rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 transform" style="width: 380px; height: 600px; border: 1px solid rgba(123, 44, 191, 0.2);">
+            <!-- Header with Brand -->
             <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4 flex justify-between items-center">
                 <div class="flex items-center">
                     <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center mr-2">
-                        <i class="fas fa-gem text-purple-600 text-lg"></i> 
+                        <i class="fas fa-gem text-purple-600 text-lg"></i>
                     </div>
                     <div>
                         <h3 class="font-bold text-lg">Diya AI</h3>
@@ -117,25 +121,29 @@
                 </div>
                 <div class="flex space-x-2">
                     <button id="minimize-chat" class="hover:bg-purple-500 rounded-full w-8 h-8 flex items-center justify-center">
-                        <i class="fas fa-minus"></i> 
+                        <i class="fas fa-minus"></i>
                     </button>
                     <button id="close-chat" class="hover:bg-purple-500 rounded-full w-8 h-8 flex items-center justify-center">
-                        <i class="fas fa-times"></i> 
+                        <i class="fas fa-times"></i>
                     </button>
                 </div>
             </div>
     
+            <!-- Chat Messages Area with Custom Scrollbar -->
             <div id="chat-messages" class="p-6 overflow-y-auto bg-gray-50" style="height: 440px; scrollbar-width: thin; scrollbar-color: #9d4edd #f3f4f6;">
-                </div>
+                <!-- Messages will be added here -->
+            </div>
     
+            <!-- Input Area with Modern Look -->
             <div class="border-t border-gray-200 p-4 flex bg-white">
                 <input id="user-message" type="text" placeholder="Type a message..." 
                     class="flex-1 px-4 py-2 border border-gray-300 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent">
                 <button id="send-button" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-5 py-3 rounded-r-xl hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 flex items-center justify-center">
-                    <i class="fas fa-paper-plane"></i> 
+                    <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
     
+            <!-- Typing Indicator (initially hidden) -->
             <div id="typing-indicator" class="hidden px-4 py-2 bg-gray-50 border-t border-gray-200">
                 <div class="flex items-center text-sm text-gray-500">
                     <div class="typing-animation mr-2">
