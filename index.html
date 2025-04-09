@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infinite AI Jewelry Store</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="header-content">
@@ -27,25 +27,25 @@
         </div>
     </header>
 
+    <!-- Main Content -->
     <main class="container main-content">
         <div id="home-content">
+            <!-- Hero Section -->
             <div class="hero">
                 <h1>Discover Timeless Beauty</h1>
                 <p>Explore our exquisite collection of handcrafted jewelry pieces that blend traditional artistry with modern elegance.</p>
             </div>
 
+            <!-- Categories Section -->
             <section class="categories-section">
                 <h2>Our Collections</h2>
-                <div class="category-grid" id="category-grid">
-                    <!-- Categories will be dynamically populated here -->
-                </div>
+                <div class="category-grid" id="category-grid"></div>
             </section>
 
+            <!-- Featured Items -->
             <section class="featured-section">
                 <h2>Featured Pieces</h2>
-                <div class="jewelry-grid" id="featured-items">
-                    <!-- Featured items will be dynamically populated here -->
-                </div>
+                <div class="jewelry-grid" id="featured-items"></div>
             </section>
         </div>
 
@@ -54,12 +54,11 @@
                 <i data-lucide="arrow-left"></i> Back to Categories
             </button>
             <h2 id="category-title"></h2>
-            <div class="jewelry-grid" id="category-items">
-                <!-- Category items will be dynamically populated here -->
-            </div>
+            <div class="jewelry-grid" id="category-items"></div>
         </div>
     </main>
 
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
@@ -100,63 +99,7 @@
         </div>
     </footer>
 
-    <!-- Chat Widget with Simplified Structure -->
-    <div id="rasa-chat-widget" class="chat-widget">
-        <!-- Chat Icon Button -->
-        <button id="chat-toggle" class="chat-toggle-btn" type="button">
-            <span class="pulse-effect"></span>
-            <i class="fas fa-comment-dots chat-icon"></i>
-        </button>
-    
-        <!-- Chat Container -->
-        <div id="chat-container" class="chat-container hidden">
-            <!-- Header -->
-            <div class="chat-header">
-                <div class="chat-header-brand">
-                    <div class="chat-avatar">
-                        <i class="fas fa-gem"></i>
-                    </div>
-                    <div class="chat-title">
-                        <h3 class="chat-title-text">Diya AI</h3>
-                        <p class="chat-subtitle">Jewelry Shopping Assistant</p>
-                    </div>
-                </div>
-                <div class="chat-header-buttons">
-                    <button id="minimize-chat" class="chat-control-btn" type="button">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <button id="close-chat" class="chat-control-btn" type="button">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-    
-            <!-- Messages Area -->
-            <div id="chat-messages" class="chat-messages"></div>
-    
-            <!-- Input Area -->
-            <div class="chat-input-container">
-                <input id="user-message" type="text" placeholder="Type a message..." class="chat-input">
-                <button id="send-button" class="chat-send-btn" type="button">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
-    
-            <!-- Typing Indicator -->
-            <div id="typing-indicator" class="typing-indicator hidden">
-                <div class="typing-indicator-content">
-                    <div class="typing-animation">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                    <span class="typing-text">Diya is typing...</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="data.js"></script> 
-    <script src="app.js"></script> 
+    <script src="data.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
