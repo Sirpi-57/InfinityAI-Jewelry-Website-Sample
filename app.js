@@ -265,7 +265,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         if (closeChat) {
-            closeChat.addEventListener('click', () => {
+            // Make sure close button works by using direct function
+            closeChat.addEventListener('click', function() {
+                console.log('Close chat button clicked'); // Debug log
                 chatContainer.classList.add('hidden');
             });
         }
