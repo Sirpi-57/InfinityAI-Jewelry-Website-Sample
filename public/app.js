@@ -175,7 +175,7 @@ function openTryOnModal(jewelrySku) {
     
     // Set the iframe source
     const tryOnFrame = document.getElementById('tryOnFrame');
-    tryOnFrame.src = `https://sirpi-57.github.io/infinite-ai-jewelry-tryon/tryon.html?jewelryId=${jewelrySku}`;
+    tryOnFrame.src = `https://jewelry-tryon-app.web.app?jewelryId=${jewelrySku}`;
     
     // Optional: Add loading indicator while iframe loads
     tryOnFrame.style.opacity = '0';
